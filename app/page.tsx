@@ -17,7 +17,6 @@ export default function Home() {
     (async () => {
       let _tokens = await useGetTokens();
       setTokens(_tokens);
-      console.log(tokens);
 
       let mintutes = 1;
       const milliseconds = mintutes * 60 * 1000;
@@ -43,7 +42,7 @@ export default function Home() {
               b.creation_timestamp - a.creation_timestamp
           )
           .map(([key]) => (
-            <li key={key}>
+            <li key={key} className="py-4">
               <a
                 href={tokens[key].url}
                 target="_blank"
