@@ -2,39 +2,77 @@
 
 import Image from "next/image";
 import { useLayoutEffect, useState } from "react";
-import useGetTime from "./hooks/useGetTime";
+// import useGetTime from "./hooks/useGetTime";
+import useGetTokens from "./hooks/useGetTokens";
+
+interface Token {
+  creation_timestamp: number;
+  url: string;
+  // add other token properties as needed
+}
 
 export default function Home() {
-  let [time, setTime] = useState<number | null>(null);
+  let [tokens, setTokens] = useState<Record<string, Token>>({});
   useLayoutEffect(() => {
     (async () => {
-      let _time = await useGetTime();
-      setTime(_time.t);
-      //console.log(time);
+      let _tokens = await useGetTokens();
+      setTokens(_tokens);
+      console.log(tokens);
 
-      let mintutes = 0.5;
+      let mintutes = 1;
       const milliseconds = mintutes * 60 * 1000;
 
       const interval = setInterval(async () => {
-        let _t: any = await useGetTime();
-        setTime(_t.t);
-        //console.log(_t);
-      }, 5000);
+        let _tokens2: any = await useGetTokens();
+        setTokens(_tokens2);
+        console.log(_tokens2);
+      }, milliseconds);
     })();
   }, []);
 
+  const TokenList = () => {
+    if (!tokens || Object.keys(tokens).length === 0) {
+      return <div>No tokens available</div>;
+    }
+
+    return (
+      <ul>
+        {Object.entries(tokens)
+          .sort(
+            ([, a], [, b]: [string, Token]) =>
+              b.creation_timestamp - a.creation_timestamp
+          )
+          .map(([key]) => (
+            <li key={key}>
+              <a
+                href={tokens[key].url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {key} - Created{" "}
+                {Math.floor(
+                  (Date.now() - tokens[key].creation_timestamp) /
+                    (1000 * 60 * 60)
+                )}
+                h{" "}
+                {Math.floor(
+                  ((Date.now() - tokens[key].creation_timestamp) %
+                    (1000 * 60 * 60)) /
+                    (1000 * 60)
+                )}
+                m ago
+              </a>
+            </li>
+          ))}
+      </ul>
+    );
+  };
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <h1>{time}</h1>
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
+        <TokenList />
+        {/*}
         <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2">
             Get started by editing{" "}
@@ -71,8 +109,10 @@ export default function Home() {
             Read our docs
           </a>
         </div>
+        */}
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
+        {/*
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
           href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
@@ -118,6 +158,7 @@ export default function Home() {
           />
           Go to nextjs.org →
         </a>
+        */}
       </footer>
     </div>
   );
