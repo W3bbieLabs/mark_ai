@@ -1,8 +1,31 @@
+"use client";
+
 import Image from "next/image";
+import { useLayoutEffect, useState } from "react";
+import useGetTime from "./hooks/useGetTime";
 
 export default function Home() {
+  let [time, setTime] = useState<number | null>(null);
+  useLayoutEffect(() => {
+    (async () => {
+      let _time = await useGetTime();
+      setTime(_time.t);
+      //console.log(time);
+
+      let mintutes = 0.5;
+      const milliseconds = mintutes * 60 * 1000;
+
+      const interval = setInterval(async () => {
+        let _t: any = await useGetTime();
+        setTime(_t.t);
+        //console.log(_t);
+      }, 5000);
+    })();
+  }, []);
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <h1>{time}</h1>
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <Image
           className="dark:invert"
