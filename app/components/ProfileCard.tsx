@@ -47,25 +47,25 @@ const ProfileCard = ({
   };
 
   return (
-    <div className="w-full p-8 bg-gray-900 rounded-xl shadow-lg m-4 border border-gray-800">
-      <div className="flex items-center justify-between mb-8">
+    <div className="w-[95%] md:w-[600px] lg:w-[800px] p-4 md:p-8 bg-gray-900 rounded-xl shadow-lg mx-auto my-4 border border-gray-800">
+      <div className="flex items-center justify-between mb-6 md:mb-8">
         <div>
-          <h2 className="text-2xl font-bold text-white">
+          <h2 className="text-xl md:text-2xl font-bold text-white">
             {toTitleCase(title)}
           </h2>
-          <span className="text-sm text-gray-400">
+          <span className="text-xs md:text-sm text-gray-400">
             {getTimeDifference(created_at)}
           </span>
         </div>
         <img
           src={profileImage}
           alt="Profile"
-          className="w-16 h-16 rounded-xl object-cover ring-2 ring-gray-700"
+          className="w-12 h-12 md:w-16 md:h-16 rounded-xl object-cover ring-2 ring-gray-700"
         />
       </div>
 
       {/* Labels Grid */}
-      <div className="grid grid-cols-2 grid-rows-2 gap-6 mb-8">
+      <div className="grid grid-cols-2 grid-rows-2 gap-3 md:gap-6 mb-6 md:mb-8">
         <div className="bg-gray-800 p-4 rounded-lg">
           <div
             className={`text-center text-xl font-bold ${
@@ -109,16 +109,16 @@ const ProfileCard = ({
       </div>
 
       {/* Buttons */}
-      <div className="flex gap-4 justify-center">
+      <div className="flex gap-2 md:gap-4 justify-center">
         <button
           onClick={onButton1Click}
-          className="px-8 py-3 bg-indigo-800 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+          className="px-4 md:px-8 py-2 md:py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium text-sm md:text-base"
         >
           Dexscreener
         </button>
         <button
           onClick={onButton2Click}
-          className="px-8 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
+          className="px-4 md:px-8 py-2 md:py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium text-sm md:text-base"
         >
           Twitter
         </button>
