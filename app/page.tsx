@@ -18,7 +18,7 @@ import {
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./utils/fb-config";
 
-export const fb = initializeApp(firebaseConfig);
+const fb = initializeApp(firebaseConfig);
 const database = getDatabase(fb);
 
 interface Token {
@@ -34,7 +34,7 @@ interface Token {
   // add other token properties as needed
 }
 
-export const subscribeToFrontPage = (callback: (data: any) => void) => {
+const subscribeToFrontPage = (callback: (data: any) => void) => {
   const dbRef = ref(database, "front-page");
   return onValue(
     dbRef,
@@ -52,7 +52,7 @@ export const subscribeToFrontPage = (callback: (data: any) => void) => {
   );
 };
 
-export const getData = async (path: string) => {
+const getData = async (path: string) => {
   const dbRef = ref(getDatabase());
   let res = await get(child(dbRef, path))
     .then((snapshot) => {
