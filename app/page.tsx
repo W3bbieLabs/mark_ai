@@ -4,19 +4,84 @@ import Image from "next/image";
 import { useLayoutEffect, useState } from "react";
 // import useGetTime from "./hooks/useGetTime";
 import useGetTokens from "./hooks/useGetTokens";
+import ProfileCard from "./components/ProfileCard";
+import {
+  getDatabase,
+  ref,
+  child,
+  get,
+  set,
+  query,
+  orderByChild,
+  onValue,
+} from "firebase/database";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "./utils/fb-config";
+
+export const fb = initializeApp(firebaseConfig);
+const database = getDatabase(fb);
 
 interface Token {
   creation_timestamp: number;
   url: string;
+  image_url: string;
+  twitterLink: string;
+  m5: string;
+  h1: string;
+  h6: string;
+  h24: string;
+  created_at: number;
   // add other token properties as needed
 }
+
+export const subscribeToFrontPage = (callback: (data: any) => void) => {
+  const dbRef = ref(database, "front-page");
+  return onValue(
+    dbRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        callback(snapshot.val());
+      } else {
+        console.log("No data available");
+        callback(null);
+      }
+    },
+    (error) => {
+      console.error("Error subscribing to front-page:", error);
+    }
+  );
+};
+
+export const getData = async (path: string) => {
+  const dbRef = ref(getDatabase());
+  let res = await get(child(dbRef, path))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        return snapshot.val();
+      } else {
+        console.log("No data available");
+        return null;
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  return res;
+};
 
 export default function Home() {
   let [tokens, setTokens] = useState<Record<string, Token>>({});
   useLayoutEffect(() => {
     (async () => {
+      subscribeToFrontPage((data) => {
+        console.log(data);
+        setTokens(data);
+      });
+
+      /*
       let _tokens = await useGetTokens();
       setTokens(_tokens);
+      console.log(_tokens);
 
       let mintutes = 1;
       const milliseconds = mintutes * 60 * 1000;
@@ -26,8 +91,16 @@ export default function Home() {
         setTokens(_tokens2);
         console.log(_tokens2);
       }, milliseconds);
+
+      */
     })();
   }, []);
+
+  const getTokenTitle = (twitterLink: string): string => {
+    if (!twitterLink) return "";
+    const parts = twitterLink.split("/");
+    return parts[parts.length - 1] || "";
+  };
 
   const TokenList = () => {
     if (!tokens || Object.keys(tokens).length === 0) {
@@ -37,31 +110,27 @@ export default function Home() {
     return (
       <ul>
         {Object.entries(tokens)
-          .sort(
-            ([, a], [, b]: [string, Token]) =>
-              b.creation_timestamp - a.creation_timestamp
+          .filter(
+            ([key]) => !getTokenTitle(tokens[key].twitterLink).includes("?")
           )
+          .sort(([, a], [, b]: [string, Token]) => b.created_at - a.created_at)
           .map(([key]) => (
-            <li key={key} className="py-4">
-              <a
-                href={tokens[key].url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {key} - Created{" "}
-                {Math.floor(
-                  (Date.now() - tokens[key].creation_timestamp) /
-                    (1000 * 60 * 60)
-                )}
-                h{" "}
-                {Math.floor(
-                  ((Date.now() - tokens[key].creation_timestamp) %
-                    (1000 * 60 * 60)) /
-                    (1000 * 60)
-                )}
-                m ago
-              </a>
-            </li>
+            <ProfileCard
+              key={key}
+              profileImage={tokens[key].image_url}
+              label1={tokens[key].m5}
+              label2={tokens[key].h1}
+              label3={tokens[key].h6}
+              label4={tokens[key].h24}
+              created_at={tokens[key].created_at}
+              title={getTokenTitle(tokens[key].twitterLink)}
+              twitter_url="https://twitter.com/token"
+              dexscreener_url="https://dexscreener.com/token"
+              onButton1Click={() => window.open(tokens[key].url, "_blank")}
+              onButton2Click={() =>
+                window.open(tokens[key].twitterLink, "_blank")
+              }
+            />
           ))}
       </ul>
     );
@@ -71,6 +140,7 @@ export default function Home() {
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <TokenList />
+
         {/*}
         <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2">
