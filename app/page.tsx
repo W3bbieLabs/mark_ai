@@ -78,7 +78,7 @@ export default function Home() {
   useLayoutEffect(() => {
     (async () => {
       subscribeToFrontPage((data) => {
-        console.log(data);
+        //console.log(data);
         setTokens(data);
       });
 
