@@ -32,6 +32,9 @@ interface Token {
   h6: string;
   h24: string;
   created_at: number;
+  volume: number;
+  marketCap: number;
+  reason: string;
   // add other token properties as needed
 }
 
@@ -124,6 +127,9 @@ export default function Home() {
               label3={tokens[key].h6}
               label4={tokens[key].h24}
               created_at={tokens[key].created_at}
+              volume={tokens[key].volume}
+              marketcap={tokens[key].marketCap}
+              reason={tokens[key].reason}
               title={getTokenTitle(tokens[key].twitterLink)}
               twitter_url="https://twitter.com/token"
               dexscreener_url="https://dexscreener.com/token"

@@ -10,6 +10,9 @@ interface ProfileCardProps {
   twitter_url: string;
   created_at: string | number;
   dexscreener_url: string;
+  volume: number;
+  marketcap: number;
+  reason: string;
   onButton1Click?: () => void;
   onButton2Click?: () => void;
 }
@@ -33,6 +36,9 @@ const ProfileCard = ({
   twitter_url,
   dexscreener_url,
   created_at,
+  volume,
+  marketcap,
+  reason,
   onButton1Click,
   onButton2Click,
 }: ProfileCardProps) => {
@@ -107,6 +113,43 @@ const ProfileCard = ({
           <div className="text-center text-sm text-gray-400 mt-1">24h</div>
         </div>
       </div>
+      {/* Volume and Market Cap */}
+      <div className="grid grid-cols-2 gap-6 mb-8">
+        <div className="bg-gray-800 p-4 rounded-lg">
+          <div className="text-center text-xl font-bold text-gray-200">
+            $
+            {volume
+              ? volume >= 1000000
+                ? `${(volume / 1000000).toFixed(2)}M`
+                : `${(volume / 1000).toFixed(0)}K`
+              : "0"}
+          </div>
+          <div className="text-center text-sm text-gray-400 mt-1">
+            Volume (24h)
+          </div>
+        </div>
+        <div className="bg-gray-800 p-4 rounded-lg">
+          <div className="text-center text-xl font-bold text-gray-200">
+            $
+            {marketcap
+              ? marketcap >= 1000000
+                ? `${(marketcap / 1000000).toFixed(2)}M`
+                : `${(marketcap / 1000).toFixed(0)}K`
+              : "0"}
+          </div>
+          <div className="text-center text-sm text-gray-400 mt-1">
+            Market Cap
+          </div>
+        </div>
+      </div>
+
+      {/* Reason */}
+      {reason && (
+        <div className="bg-gray-800 p-4 rounded-lg mb-8">
+          <div className="text-gray-400 text-sm mb-2 text-center">Summary</div>
+          <div className="text-center text-sm text-gray-200">{reason}</div>
+        </div>
+      )}
 
       {/* Buttons */}
       <div className="flex gap-4 justify-center">
