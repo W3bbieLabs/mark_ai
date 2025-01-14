@@ -7,6 +7,7 @@ interface ProfileCardProps {
   label3: string;
   label4: string;
   title: string;
+  mark_score: number;
   twitter_url: string;
   created_at: string | number;
   dexscreener_url: string;
@@ -35,6 +36,7 @@ const ProfileCard = ({
   title,
   twitter_url,
   dexscreener_url,
+  mark_score,
   created_at,
   volume,
   marketcap,
@@ -71,6 +73,12 @@ const ProfileCard = ({
       </div>
 
       {/* Labels Grid */}
+      <div className="bg-gray-800 p-4 rounded-lg mb-8">
+        <div className="text-center text-xl font-bold text-gray-200">
+          {mark_score ? mark_score.toFixed(2) : "N/A"}
+        </div>
+        <div className="text-center text-sm text-gray-400 mt-1">Mark Score</div>
+      </div>
       <div className="grid grid-cols-2 grid-rows-2 gap-6 mb-8">
         <div className="bg-gray-800 p-4 rounded-lg">
           <div

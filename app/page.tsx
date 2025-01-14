@@ -35,6 +35,7 @@ interface Token {
   volume: number;
   marketCap: number;
   reason: string;
+  mark_score: number;
   // add other token properties as needed
 }
 
@@ -126,6 +127,7 @@ export default function Home() {
               label2={tokens[key].h1}
               label3={tokens[key].h6}
               label4={tokens[key].h24}
+              mark_score={tokens[key].mark_score}
               created_at={tokens[key].created_at}
               volume={tokens[key].volume}
               marketcap={tokens[key].marketCap}
