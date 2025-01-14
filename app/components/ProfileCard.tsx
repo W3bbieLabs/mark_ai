@@ -74,7 +74,11 @@ const ProfileCard = ({
 
       {/* Labels Grid */}
       <div className="bg-gray-800 p-4 rounded-lg mb-8">
-        <div className="text-center text-xl font-bold text-gray-200">
+        <div
+          className={`text-center text-xl font-bold ${
+            mark_score && mark_score < 2 ? "text-red-400" : "text-gray-200"
+          }`}
+        >
           {mark_score ? mark_score.toFixed(2) : "N/A"}
         </div>
         <div className="text-center text-sm text-gray-400 mt-1">Mark Score</div>
