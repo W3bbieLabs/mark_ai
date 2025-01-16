@@ -36,11 +36,15 @@ interface Token {
   marketCap: number;
   reason: string;
   mark_score: number;
+  tokenAddress: string;
   // add other token properties as needed
 }
 
-const subscribeToFrontPage = (callback: (data: any) => void) => {
-  const dbRef = ref(database, "front-page");
+const subscribeToEndpoint = (
+  endpoint: string,
+  callback: (data: any) => void
+) => {
+  const dbRef = ref(database, endpoint);
   return onValue(
     dbRef,
     (snapshot) => {
@@ -56,6 +60,24 @@ const subscribeToFrontPage = (callback: (data: any) => void) => {
     }
   );
 };
+
+// const subscribeToFrontPage = (callback: (data: any) => void) => {
+//   const dbRef = ref(database, "front-page");
+//   return onValue(
+//     dbRef,
+//     (snapshot) => {
+//       if (snapshot.exists()) {
+//         callback(snapshot.val());
+//       } else {
+//         console.log("No data available");
+//         callback(null);
+//       }
+//     },
+//     (error) => {
+//       console.error("Error subscribing to front-page:", error);
+//     }
+//   );
+// };
 
 const getData = async (path: string) => {
   const dbRef = ref(getDatabase());
@@ -74,14 +96,66 @@ const getData = async (path: string) => {
   return res;
 };
 
+//create a function to calculate the average rating for a token
+const calculateAverageRating = (
+  ratings: Record<string, { rating: number }>
+) => {
+  if (ratings == undefined) {
+    return 0;
+  }
+  let totalRating = 0;
+  let count = 0;
+  console.log("Ratings");
+  console.log(ratings);
+
+  //Iterate through ratings to find matches for this token
+  Object.values(ratings).forEach((ratingObj) => {
+    if (ratingObj.rating) {
+      totalRating += ratingObj.rating;
+      count++;
+    }
+  });
+
+  // Return 0 if no ratings, otherwise return average rounded to 1 decimal
+  return count === 0 ? 0 : Number((totalRating / count).toFixed(1));
+};
+
 export default function Home() {
   let [tokens, setTokens] = useState<Record<string, Token>>({});
+  let [all_ratings, setRatings] = useState<Record<string, any>>({});
+
   useLayoutEffect(() => {
     (async () => {
-      subscribeToFrontPage((data) => {
+      subscribeToEndpoint("front-page", (data) => {
+        //console.log("front-page");
         //console.log(data);
+        for (let i in data) {
+          //console.log(data[i]);
+        }
         setTokens(data);
       });
+
+      subscribeToEndpoint("ratings", (data) => {
+        console.log("ratings");
+        console.log(data);
+        for (let token in data) {
+          const averageRating = calculateAverageRating(data[token]);
+          //console.log(`Average rating for ${token}: ${averageRating}`);
+          all_ratings[token] = {
+            ...all_ratings[token],
+            averageRating: Math.round(averageRating),
+          };
+        }
+        setRatings(all_ratings);
+        console.log(all_ratings);
+      });
+      // subscribeToFrontPage((data) => {
+      //   console.log(data);
+      //   for (let i in data) {
+      //     console.log(data[i]);
+      //   }
+      //   setTokens(data);
+      // });
 
       /*
       let _tokens = await useGetTokens();
@@ -121,12 +195,14 @@ export default function Home() {
           .sort(([, a], [, b]: [string, Token]) => b.created_at - a.created_at)
           .map(([key]) => (
             <ProfileCard
+              averageRating={all_ratings[key]?.averageRating || 0}
               key={key}
               profileImage={tokens[key].image_url}
               label1={tokens[key].m5}
               label2={tokens[key].h1}
               label3={tokens[key].h6}
               label4={tokens[key].h24}
+              tokenAddress={tokens[key].tokenAddress}
               mark_score={tokens[key].mark_score}
               created_at={tokens[key].created_at}
               volume={tokens[key].volume}
