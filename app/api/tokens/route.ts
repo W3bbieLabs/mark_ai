@@ -18,6 +18,7 @@ export async function POST(request: Request) {
         const body = await request.json();
         // console.log(body);
         const { tokenAddress, rating } = body;
+        console.log(tokenAddress, rating);
         const response = await fetch('https://w3bbiegames.xyz/rating', {
             method: 'POST',
             headers: {
