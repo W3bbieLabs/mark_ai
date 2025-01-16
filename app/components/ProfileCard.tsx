@@ -199,22 +199,25 @@ const ProfileCard = ({
         )}
 
         {/* Buttons */}
-        <div className="flex gap-4 justify-center">
+        <div className="flex gap-4 justify-center mb-4">
           <button
             onClick={onButton1Click}
-            className="px-8 py-3 bg-indigo-800 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+            className="w-full px-8 py-3 bg-indigo-800 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
           >
             Dexscreener
           </button>
           <button
             onClick={onButton2Click}
-            className="px-8 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
+            className="w-full px-8 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
           >
             Twitter
           </button>
+        </div>
+
+        <div className="flex gap-4 justify-center">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-500 transition-colors font-medium"
+            className="w-full px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-500 transition-colors font-medium"
           >
             Rate Token
           </button>

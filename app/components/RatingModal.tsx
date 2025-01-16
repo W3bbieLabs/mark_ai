@@ -12,7 +12,9 @@ const RatingModal = ({ isOpen, onClose, onSubmit }: RatingModalProps) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-gray-800 p-6 rounded-lg shadow-xl w-[90%] max-w-md">
-        <h3 className="text-xl font-bold text-white mb-4">Rate this Token</h3>
+        <h3 className="text-xl font-bold text-white mb-4 text-center">
+          Rate this Token
+        </h3>
         <div className="flex justify-center space-x-2 mb-6">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
