@@ -63,7 +63,7 @@ const ProfileCard = ({
 
   const handleRating = (rating: number) => {
     // TODO: Handle rating submission
-    console.log(`Rated ${rating} stars`);
+    // console.log(`Rated ${rating} stars`);
     fetch("/api/tokens", {
       method: "POST",
       headers: {
