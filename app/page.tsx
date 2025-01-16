@@ -105,8 +105,8 @@ const calculateAverageRating = (
   }
   let totalRating = 0;
   let count = 0;
-  console.log("Ratings");
-  console.log(ratings);
+  // console.log("Ratings");
+  // console.log(ratings);
 
   //Iterate through ratings to find matches for this token
   Object.values(ratings).forEach((ratingObj) => {
@@ -136,8 +136,8 @@ export default function Home() {
       });
 
       subscribeToEndpoint("ratings", (data) => {
-        console.log("ratings");
-        console.log(data);
+        // console.log("ratings");
+        // console.log(data);
         for (let token in data) {
           const averageRating = calculateAverageRating(data[token]);
           //console.log(`Average rating for ${token}: ${averageRating}`);
@@ -147,7 +147,7 @@ export default function Home() {
           };
         }
         setRatings(all_ratings);
-        console.log(all_ratings);
+        // console.log(all_ratings);
       });
       // subscribeToFrontPage((data) => {
       //   console.log(data);
