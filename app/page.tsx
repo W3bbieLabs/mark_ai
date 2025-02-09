@@ -18,6 +18,7 @@ import {
 } from "firebase/database";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./utils/fb-config";
+import axios from "axios";
 
 const fb = initializeApp(firebaseConfig);
 const database = getDatabase(fb);
@@ -123,7 +124,11 @@ const calculateAverageRating = (
 export default function Home() {
   let [tokens, setTokens] = useState<Record<string, Token>>({});
   let [all_ratings, setRatings] = useState<Record<string, any>>({});
-
+  let [searchInput, setSearchInput] = useState("");
+  let [analyzeImg, setAnalyzeImg] = useState("");
+  let [analyzeName, setAnalyzeName] = useState("");
+  let [prediction, setPrediction] = useState("");
+  let [confidence, setConfidence] = useState(0);
   useLayoutEffect(() => {
     (async () => {
       subscribeToEndpoint("front-page", (data) => {
@@ -175,6 +180,41 @@ export default function Home() {
     })();
   }, []);
 
+  const handleSearch = async () => {
+    console.log("Searching for:", searchInput);
+    let res = await fetch("/api/ai", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tokenAddress: searchInput,
+      }),
+    }).catch((error) => {
+      console.error("Error submitting rating:", error);
+    });
+
+    if (res) {
+      let data = await res.json();
+      const { img, name, prediction, confidence } = data;
+      setAnalyzeImg(img);
+      setAnalyzeName(name);
+      setPrediction(prediction);
+      setConfidence(confidence);
+    }
+
+    // console.log("Searching for:", searchInput);
+    // const response = await axios.get(
+    //   `https://w3bbiegames2.xyz/predict?address=Hjw6bEcHtbHGpQr8onG3izfJY5DJiWdt7uk2BfdSpump&key=sendit`,
+    //   {
+    //     timeout: 10000,
+    //     headers: { Accept: "application/json" },
+    //   }
+    // );
+    // console.log("Response:", response.data);
+    // console.log("done");
+  };
+
   const getTokenTitle = (twitterLink: string): string => {
     if (!twitterLink) return "";
     const parts = twitterLink.split("/");
@@ -225,6 +265,70 @@ export default function Home() {
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <Header />
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+        <div className="w-[95%] sm:w-[80%] md:w-[75%] lg:w-[70%] max-w-[800px] p-4 md:p-8 bg-gray-900 rounded-xl shadow-lg mx-auto my-4 border border-gray-800">
+          <div className="mb-4">
+            {analyzeImg ? (
+              <img
+                src={analyzeImg || ""}
+                alt="Analysis"
+                className="w-48 h-48 object-cover rounded-xl mx-auto"
+              />
+            ) : (
+              <div></div>
+            )}
+          </div>
+
+          {prediction ? (
+            <div className="text-center text-2xl font-bold text-white">
+              Prediction: {prediction}
+            </div>
+          ) : (
+            <div></div>
+          )}
+
+          {analyzeName ? (
+            <div className="text-center text-1xl text-white pb-4">
+              {analyzeName}
+            </div>
+          ) : (
+            <div></div>
+          )}
+
+          {confidence && (
+            <div className="w-full mb-6">
+              <div className="text-center text-sm text-gray-400 mb-2">
+                Confidence: {(confidence * 100).toFixed(1)}%
+              </div>
+              <div className="relative h-4 bg-gray-800 rounded-full overflow-hidden">
+                <div
+                  className="absolute h-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500"
+                  style={{ width: `${confidence * 100}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <span>0</span>
+                <span>50</span>
+                <span>100</span>
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-col gap-4">
+            <input
+              type="search"
+              placeholder="Enter a token address..."
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="w-full px-4 py-2 text-lg bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-600 text-white placeholder-gray-400"
+            />
+            <button
+              type="submit"
+              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-colors duration-200 w-full"
+              onClick={handleSearch}
+            >
+              Analyze
+            </button>
+          </div>
+        </div>
         <TokenList />
 
         {/*}
