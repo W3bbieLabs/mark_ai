@@ -129,6 +129,7 @@ export default function Home() {
   let [analyzeName, setAnalyzeName] = useState("");
   let [prediction, setPrediction] = useState("");
   let [confidence, setConfidence] = useState(0);
+  let [isLoading, setIsLoading] = useState(false);
   useLayoutEffect(() => {
     (async () => {
       subscribeToEndpoint("front-page", (data) => {
@@ -182,6 +183,7 @@ export default function Home() {
 
   const handleSearch = async () => {
     console.log("Searching for:", searchInput);
+    setIsLoading(true);
     let res = await fetch("/api/ai", {
       method: "POST",
       headers: {
@@ -193,6 +195,8 @@ export default function Home() {
     }).catch((error) => {
       console.error("Error submitting rating:", error);
     });
+
+    setIsLoading(false);
 
     if (res) {
       let data = await res.json();
@@ -263,6 +267,11 @@ export default function Home() {
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      {isLoading && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-white"></div>
+        </div>
+      )}
       <Header />
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <div className="w-[95%] sm:w-[80%] md:w-[75%] lg:w-[70%] max-w-[800px] p-4 md:p-8 bg-gray-900 rounded-xl shadow-lg mx-auto my-4 border border-gray-800">
@@ -294,7 +303,7 @@ export default function Home() {
             <div></div>
           )}
 
-          {confidence && (
+          {confidence ? (
             <div className="w-full mb-6">
               <div className="text-center text-sm text-gray-400 mb-2">
                 Confidence: {(confidence * 100).toFixed(1)}%
@@ -311,6 +320,8 @@ export default function Home() {
                 <span>100</span>
               </div>
             </div>
+          ) : (
+            <div></div>
           )}
 
           <div className="flex flex-col gap-4">
@@ -318,6 +329,11 @@ export default function Home() {
               type="search"
               placeholder="Enter a token address..."
               onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
               className="w-full px-4 py-2 text-lg bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-600 text-white placeholder-gray-400"
             />
             <button
