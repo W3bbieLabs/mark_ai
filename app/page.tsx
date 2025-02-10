@@ -272,11 +272,12 @@ export default function Home() {
           <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-white"></div>
         </div>
       )}
-      <h1 className="text-white text-xl font-bold pt-8">
-        CA: 5jVhenaTT5ccPgSfvLLHysvmyXTXmrZQDCUBjfBXCQr3
-      </h1>
+
       <Header />
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+        <h1 className="text-white font-bold pt-16 text-center">
+          CA: 5jVhenaTT5ccPgSfvLLHysvmyXTXmrZQDCUBjfBXCQr3
+        </h1>
         <div className="w-[95%] sm:w-[80%] md:w-[75%] lg:w-[70%] max-w-[800px] p-4 md:p-8 bg-gray-900 rounded-xl shadow-lg mx-auto my-4 border border-gray-800">
           <div className="mb-4">
             {analyzeImg ? (
