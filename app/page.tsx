@@ -275,9 +275,11 @@ export default function Home() {
 
       <Header />
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <p className="text-white font-bold pt-16 text-center text-xs">
-          CA: 5jVhenaTT5ccPgSfvLLHysvmyXTXmrZQDCUBjfBXCQr3
-        </p>
+        <div className="w-[100%] flex justify-center">
+          <div className="w-[100%] text-white font-bold pt-16 text-center text-xs flex justify-center ">
+            CA: 5jVhenaTT5ccPgSfvLLHysvmyXTXmrZQDCUBjfBXCQr3
+          </div>
+        </div>
         <div className="w-[95%] sm:w-[80%] md:w-[75%] lg:w-[70%] max-w-[800px] p-4 md:p-8 bg-gray-900 rounded-xl shadow-lg mx-auto my-4 border border-gray-800">
           <div className="mb-4">
             {analyzeImg ? (
