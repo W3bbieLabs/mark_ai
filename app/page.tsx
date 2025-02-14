@@ -266,94 +266,109 @@ export default function Home() {
   };
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      {isLoading && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-white"></div>
-        </div>
-      )}
-
-      <Header />
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <div className="w-[100%] flex justify-center">
-          <div className="w-[100%] text-white font-bold pt-16 text-center text-xs flex justify-center ">
-            CA: 5jVhenaTT5ccPgSfvLLHysvmyXTXmrZQDCUBjfBXCQr3
+    <div className="w-[95%] sm:w-[80%] md:w-[75%] lg:w-[70%] max-w-[800px] p-2 md:p-8 rounded-xl shadow-lg mx-auto my-4  ">
+      <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-2 pb-20 gap-16 font-[family-name:var(--font-geist-sans)]">
+        {isLoading && (
+          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-white"></div>
           </div>
-        </div>
-        <div className="w-[95%] sm:w-[80%] md:w-[75%] lg:w-[70%] max-w-[800px] p-4 md:p-8 bg-gray-900 rounded-xl shadow-lg mx-auto my-4 border border-gray-800">
-          <div className="mb-4">
-            {analyzeImg ? (
-              <img
-                src={analyzeImg || ""}
-                alt="Analysis"
-                className="w-48 h-48 object-cover rounded-xl mx-auto"
-              />
+        )}
+
+        <Header />
+        <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+          <div className="w-[100%] flex justify-center">
+            <div className="w-[100%] font-bold text-center text-3xl md:text-4xl lg:text-3xl flex justify-center bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 bg-clip-text text-transparent animate-gradient-x">
+              Discover promising tokens with AI-powered analysis
+            </div>
+          </div>
+          <div className="w-[100%] flex justify-center">
+            <div className="w-[100%] font-bold text-center text-s  flex justify-center bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 bg-clip-text text-transparent animate-gradient-x">
+              Filter out the bullsh*t
+            </div>
+          </div>
+          <div className="w-[100%] flex justify-center">
+            {/* <div className="w-[100%]  font-bold text-center text-sm flex justify-center from-purple-500 via-pink-500 to-orange-500 bg-clip-text text-transparent  animate-gradient-x ">
+              CA: 5jVhenaTT5ccPgSfvLLHysvmyXTXmrZQDCUBjfBXCQr3
+            </div> */}
+
+            <div className="w-[100%] font-bold text-center text-s  flex justify-center bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 bg-clip-text text-transparent animate-gradient-x py-1">
+              CA: 5jVhenaTT5ccPgSfvLLHysvmyXTXmrZQDCUBjfBXCQr3
+            </div>
+          </div>
+          <div className="w-[95%] sm:w-[80%] md:w-[75%] lg:w-[70%] max-w-[800px] p-4 md:p-8 bg-gray-900 rounded-xl shadow-lg mx-auto my-4 border border-gray-800">
+            <div className="mb-4">
+              {analyzeImg ? (
+                <img
+                  src={analyzeImg || ""}
+                  alt="Analysis"
+                  className="w-48 h-48 object-cover rounded-xl mx-auto"
+                />
+              ) : (
+                <div></div>
+              )}
+            </div>
+
+            {prediction ? (
+              <div className="text-center text-2xl font-bold text-white">
+                Prediction: {prediction}
+              </div>
             ) : (
               <div></div>
             )}
+
+            {analyzeName ? (
+              <div className="text-center text-1xl text-white pb-4">
+                {analyzeName}
+              </div>
+            ) : (
+              <div></div>
+            )}
+
+            {confidence ? (
+              <div className="w-full mb-6">
+                <div className="text-center text-sm text-gray-400 mb-2">
+                  Confidence: {(confidence * 100).toFixed(1)}%
+                </div>
+                <div className="relative h-4 bg-gray-800 rounded-full overflow-hidden">
+                  <div
+                    className="absolute h-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500"
+                    style={{ width: `${confidence * 100}%` }}
+                  />
+                </div>
+                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                  <span>0</span>
+                  <span>50</span>
+                  <span>100</span>
+                </div>
+              </div>
+            ) : (
+              <div></div>
+            )}
+
+            <div className="flex flex-col gap-4">
+              <input
+                type="search"
+                placeholder="Enter a token address..."
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
+                className="w-full px-4 py-2 text-lg bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-600 text-white placeholder-gray-400"
+              />
+              <button
+                type="submit"
+                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-colors duration-200 w-full"
+                onClick={handleSearch}
+              >
+                Analyze
+              </button>
+            </div>
           </div>
+          <TokenList />
 
-          {prediction ? (
-            <div className="text-center text-2xl font-bold text-white">
-              Prediction: {prediction}
-            </div>
-          ) : (
-            <div></div>
-          )}
-
-          {analyzeName ? (
-            <div className="text-center text-1xl text-white pb-4">
-              {analyzeName}
-            </div>
-          ) : (
-            <div></div>
-          )}
-
-          {confidence ? (
-            <div className="w-full mb-6">
-              <div className="text-center text-sm text-gray-400 mb-2">
-                Confidence: {(confidence * 100).toFixed(1)}%
-              </div>
-              <div className="relative h-4 bg-gray-800 rounded-full overflow-hidden">
-                <div
-                  className="absolute h-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500"
-                  style={{ width: `${confidence * 100}%` }}
-                />
-              </div>
-              <div className="flex justify-between text-xs text-gray-400 mt-1">
-                <span>0</span>
-                <span>50</span>
-                <span>100</span>
-              </div>
-            </div>
-          ) : (
-            <div></div>
-          )}
-
-          <div className="flex flex-col gap-4">
-            <input
-              type="search"
-              placeholder="Enter a token address..."
-              onChange={(e) => setSearchInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSearch();
-                }
-              }}
-              className="w-full px-4 py-2 text-lg bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-600 text-white placeholder-gray-400"
-            />
-            <button
-              type="submit"
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-colors duration-200 w-full"
-              onClick={handleSearch}
-            >
-              Analyze
-            </button>
-          </div>
-        </div>
-        <TokenList />
-
-        {/*}
+          {/*}
         <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2">
             Get started by editing{" "}
@@ -391,9 +406,9 @@ export default function Home() {
           </a>
         </div>
         */}
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        {/*
+        </main>
+        <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
+          {/*
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
           href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
@@ -440,7 +455,8 @@ export default function Home() {
           Go to nextjs.org →
         </a>
         */}
-      </footer>
+        </footer>
+      </div>
     </div>
   );
 }

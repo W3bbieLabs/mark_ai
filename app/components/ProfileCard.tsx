@@ -98,7 +98,7 @@ const ProfileCard = ({
         </div>
 
         {/* Labels Grid */}
-        <div className="bg-gray-800 p-4 rounded-lg mb-8">
+        {/* <div className="bg-gray-800 p-4 rounded-lg mb-8">
           <div className="flex justify-center space-x-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
@@ -115,7 +115,7 @@ const ProfileCard = ({
           <div className="text-center text-sm text-gray-400 mt-1">
             Average Rating
           </div>
-        </div>
+        </div> */}
         <div className="grid grid-cols-2 grid-rows-2 gap-6 mb-8">
           <div className="bg-gray-800 p-4 rounded-lg">
             <div
@@ -214,21 +214,21 @@ const ProfileCard = ({
           </button>
         </div>
 
-        <div className="flex gap-4 justify-center">
+        {/* <div className="flex gap-4 justify-center">
           <button
             onClick={() => setIsModalOpen(true)}
             className="w-full px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-500 transition-colors font-medium"
           >
             Rate Token
           </button>
-        </div>
+        </div> */}
       </div>
 
-      <RatingModal
+      {/* <RatingModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleRating}
-      />
+      /> */}
     </>
   );
 };
