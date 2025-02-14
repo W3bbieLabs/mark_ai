@@ -278,7 +278,8 @@ export default function Home() {
         <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
           <div className="w-[100%] flex justify-center">
             <div className="w-[100%] font-bold text-center text-3xl md:text-4xl lg:text-3xl flex justify-center bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 bg-clip-text text-transparent animate-gradient-x">
-              Discover promising tokens with AI-powered analysis
+              Compare Solana token websites on dexscreener against rugged coin
+              websites with AI-Powered analysis.
             </div>
           </div>
           <div className="w-[100%] flex justify-center">
